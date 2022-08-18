@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">ABCC</string>
+    <string name="app_name">ABC</string>
+    <string name="mental_heal">mental health</string>
+    <string name="abc">ABC</string>
 </resources>
