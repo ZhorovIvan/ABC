@@ -2,4 +2,27 @@
     <string name="app_name">ABC</string>
     <string name="mental_heal">mental health</string>
     <string name="abc">ABC</string>
+    <string name="settings_general">Помощь</string>
+    <string name="create_node_button">Создать запись</string>
+    <string name="my_goals_button">Мой цели</string>
+    <string name="my_analysis_button">Мой анализ</string>
+    <string name="add_new_goal_button">Добавить цель</string>
+    <string name="remote_done_goals">Удалить завершенные цели</string>
+    <string name="ready_button">Done!</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="write_mask_input_text">Напишите сюда цель</string>
 </resources>

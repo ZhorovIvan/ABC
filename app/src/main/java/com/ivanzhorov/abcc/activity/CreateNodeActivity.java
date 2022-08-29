@@ -1,62 +1,23 @@
 package com.ivanzhorov.abcc.activity;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.ivanzhorov.abcc.R;
 
-public class GeneralActivity extends AppCompatActivity {
+public class CreateNodeActivity extends AppCompatActivity {
 
     private int currentApiVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_general);
+        setContentView(R.layout.activity_create_node);
         hideStatusBar();
         hideSystemButtons();
-        initButtons();
-    }
-
-    private void initButtons() {
-        Button settingButton = (Button) findViewById(R.id.setting_button);
-        Button newNodeButton = (Button) findViewById(R.id.new_node);
-        Button myAnalysisButton = (Button) findViewById(R.id.analysis);
-        Button myGoalButton = (Button) findViewById(R.id.goal);
-
-        settingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openNewActivity(HelpActivity.class);
-            }
-        });
-        newNodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openNewActivity(CreateNodeActivity.class);
-            }
-        });
-        myAnalysisButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openNewActivity(MyAnalysisActivity.class);
-            }
-        });
-        myGoalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openNewActivity(MyGoalActivity.class);
-            }
-        });
-    }
-
-    private void openNewActivity(Class activityClass) {
-        Intent intent = new Intent(this, activityClass);
-        startActivity(intent);
     }
 
     private void hideSystemButtons() {
@@ -111,4 +72,5 @@ public class GeneralActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
+
 }
