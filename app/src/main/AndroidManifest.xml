@@ -14,7 +14,22 @@
         android:theme="@style/Theme.ABCC"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.HelpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MyGoalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MyAnalysisActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CreateNodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.GeneralActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
