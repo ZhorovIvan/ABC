@@ -4,9 +4,11 @@
     <string name="abc">ABC</string>
     <string name="settings_general">Помощь</string>
     <string name="create_node_button">Создать запись</string>
+    <string name="hint_add_new_goal">Напишите сюда цель</string>
     <string name="my_goals_button">Мой цели</string>
     <string name="my_analysis_button">Мой анализ</string>
-    <string name="add_new_goal_button">Добавить цель</string>
+    <string name="create_new_goal_button">Создать новую цель</string>
+    <string name="insert_new_goal_button">Добавить</string>
     <string name="remote_done_goals">Удалить завершенные цели</string>
     <string name="ready_button">Done!</string>
 

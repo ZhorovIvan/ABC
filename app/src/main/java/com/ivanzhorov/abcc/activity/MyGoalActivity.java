@@ -1,22 +1,36 @@
 package com.ivanzhorov.abcc.activity;
-
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.ivanzhorov.abcc.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class MyGoalActivity extends AppCompatActivity {
 
     private int currentApiVersion;
+    private Switch switch1, switch2, switch3, switch4, switch5;
+    private Button addButton, removeButtonButton;
+    private TextView goal1, goal2, goal3, goal4, goal5;
+    private EditText userInput;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,36 +40,84 @@ public class MyGoalActivity extends AppCompatActivity {
         initAllEntities();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initAllEntities() {
-        Button addButton = (Button) findViewById(R.id.add_new_goal);
-        Button removeButtonButton = (Button) findViewById(R.id.remove_button);
+        addButton = (Button) findViewById(R.id.add_new_goal);
+        removeButtonButton = (Button) findViewById(R.id.remove_button);
 
-        TextView goal1 = findViewById(R.id.goal1);
-        TextView goal2 = findViewById(R.id.goal2);
-        TextView goal3 = findViewById(R.id.goal3);
-        TextView goal4 = findViewById(R.id.goal4);
-        TextView goal5 = findViewById(R.id.goal5);
+        goal1 = findViewById(R.id.goal1);
+        goal2 = findViewById(R.id.goal2);
+        goal3 = findViewById(R.id.goal3);
+        goal4 = findViewById(R.id.goal4);
+        goal5 = findViewById(R.id.goal5);
 
-        Switch switch1 = findViewById(R.id.switch1);
-        Switch switch2 = findViewById(R.id.switch2);
-        Switch switch3 = findViewById(R.id.switch3);
-        Switch switch4 = findViewById(R.id.switch4);
-        Switch switch5 = findViewById(R.id.switch5);
+        switch1 = findViewById(R.id.switch1);
+        switch2 = findViewById(R.id.switch2);
+        switch3 = findViewById(R.id.switch3);
+        switch4 = findViewById(R.id.switch4);
+        switch5 = findViewById(R.id.switch5);
 
-        TextInputLayout userInput = findViewById(R.id.user_input_for_goal);
+        userInput = (EditText) findViewById(R.id.input_goal);
 
+        hideUnusedEntities(
+                new ArrayList<Switch>(Arrays.asList(switch1, switch2, switch3, switch4, switch5)),
+                new ArrayList<TextView>(Arrays.asList(goal1, goal2, goal3, goal4, goal5)),
+                userInput);
+
+        userInput.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //If the keyevent is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    enterPushed();
+                    return true;
+                }
+                return false;
+            }
+        });
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Some code
+                userInput.setVisibility(View.VISIBLE);
             }
         });
         removeButtonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Some code
+                closeAllTurnOnSwitches();
             }
         });
+    }
+
+    private void closeAllTurnOnSwitches() {
+        //If some switches are turn on then hide them all
+    }
+
+    private void enterPushed() {
+        userInput.setVisibility(View.INVISIBLE);
+        String userGoal = String.valueOf(userInput.getText());
+        if (userGoal.equals("")) {
+            //write logic for empty input
+        }else{
+            chooseWriteRowForFilling(userGoal);
+        }
+    }
+
+    private void chooseWriteRowForFilling(String userGoal) {
+        goal1.setText(userGoal);
+        switch1.setVisibility(View.VISIBLE);
+        goal1.setVisibility(View.VISIBLE);
+        userInput.setText("");
+        closeKeyboard();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void hideUnusedEntities(ArrayList<Switch> switches,
+                                    ArrayList<TextView> textGoals,
+                                    EditText input) {
+        textGoals.forEach(textGoal -> textGoal.setVisibility(View.INVISIBLE));
+        switches.forEach(goalSwitch -> goalSwitch.setVisibility(View.INVISIBLE));
+        input.setVisibility(View.INVISIBLE);
     }
 
     private void hideSystemButtons() {
@@ -66,16 +128,10 @@ public class MyGoalActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        // This work only for android 4.4+
-        if(currentApiVersion >= Build.VERSION_CODES.KITKAT)
-        {
+        if(currentApiVersion >= Build.VERSION_CODES.KITKAT) {
             getWindow().getDecorView().setSystemUiVisibility(flags);
-            // Code below is to handle presses of Volume up or Volume down.
-            // Without this, after pressing volume buttons, the navigation bar will
-            // show up and won't hide
             final View decorView = getWindow().getDecorView();
-            decorView
-                    .setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener()
+            decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener()
                     {
                         @Override
                         public void onSystemUiVisibilityChange(int visibility)
@@ -90,8 +146,7 @@ public class MyGoalActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus)
-    {
+    public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if(currentApiVersion >= Build.VERSION_CODES.KITKAT && hasFocus)
         {
@@ -110,5 +165,20 @@ public class MyGoalActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
+
+    private void closeKeyboard() {
+        // this will give us the view
+        // which is currently focus
+        // in this layout
+        View view = this.getCurrentFocus();
+        // if nothing is currently
+        // focus then this will protect
+        // the app from crash
+        if (view != null) {
+            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
 
 }
