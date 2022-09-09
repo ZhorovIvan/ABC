@@ -17,7 +17,7 @@
             android:name=".activity.HelpActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.MyGoalActivity"
+            android:name=".activity.MyGoalActivity.MyGoalActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MyAnalysisActivity"

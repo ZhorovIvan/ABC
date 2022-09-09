@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.ivanzhorov.abcc.R;
+import com.ivanzhorov.abcc.activity.MyGoalActivity.MyGoalActivity;
 
 public class GeneralActivity extends AppCompatActivity {
 
