@@ -7,10 +7,14 @@ public class GoalRow {
 
     private TextView goalField;
     private Switch goalSwitch;
+    private String TextViewName;
+    private String SwitchName;
 
-    public GoalRow(TextView goalField, Switch goalSwitch) {
+    public GoalRow(TextView goalField, Switch goalSwitch, String textViewName, String switchName) {
         this.goalField = goalField;
         this.goalSwitch = goalSwitch;
+        TextViewName = textViewName;
+        SwitchName = switchName;
     }
 
     public TextView getGoalField() {
@@ -29,4 +33,19 @@ public class GoalRow {
         this.goalSwitch = goalSwitch;
     }
 
+    public String getTextViewName() {
+        return TextViewName;
+    }
+
+    public void setTextViewName(String textViewName) {
+        TextViewName = textViewName;
+    }
+
+    public String getSwitchName() {
+        return SwitchName;
+    }
+
+    public void setSwitchName(String switchName) {
+        SwitchName = switchName;
+    }
 }

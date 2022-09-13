@@ -18,7 +18,8 @@
             android:exported="false" />
         <activity
             android:name=".activity.MyGoalActivity.MyGoalActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MyAnalysisActivity"
             android:exported="false" />
