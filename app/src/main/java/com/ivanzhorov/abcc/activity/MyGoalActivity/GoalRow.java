@@ -5,47 +5,41 @@ import android.widget.TextView;
 
 public class GoalRow {
 
-    private TextView goalField;
-    private Switch goalSwitch;
-    private String TextViewName;
-    private String SwitchName;
+    private final TextView goalField;
+    private final Switch goalSwitch;
+    private final String rowNumber;
+    private final String textViewValueName = "textViewValue";
+    private final String switchValueName = "switchValue";
+    private final String textViewVisibleStatusName = "textViewStatus";
+    private final String switchVisibleStatusName = "switchStatus";
 
-    public GoalRow(TextView goalField, Switch goalSwitch, String textViewName, String switchName) {
+    public GoalRow(TextView goalField, Switch goalSwitch, String rowNumber) {
         this.goalField = goalField;
         this.goalSwitch = goalSwitch;
-        TextViewName = textViewName;
-        SwitchName = switchName;
+        this.rowNumber = rowNumber;
     }
 
     public TextView getGoalField() {
         return goalField;
     }
 
-    public void setGoalField(TextView goalField) {
-        this.goalField = goalField;
-    }
-
     public Switch getGoalSwitch() {
         return goalSwitch;
     }
 
-    public void setGoalSwitch(Switch goalSwitch) {
-        this.goalSwitch = goalSwitch;
+    public String getTextViewValueName() {
+        return textViewValueName + rowNumber;
     }
 
-    public String getTextViewName() {
-        return TextViewName;
+    public String getSwitchValueName() {
+        return switchValueName + rowNumber;
     }
 
-    public void setTextViewName(String textViewName) {
-        TextViewName = textViewName;
+    public String getTextViewVisibleStatusName() {
+        return textViewVisibleStatusName + rowNumber;
     }
 
-    public String getSwitchName() {
-        return SwitchName;
-    }
-
-    public void setSwitchName(String switchName) {
-        SwitchName = switchName;
+    public String getSwitchVisibleStatusName() {
+        return switchVisibleStatusName + rowNumber;
     }
 }

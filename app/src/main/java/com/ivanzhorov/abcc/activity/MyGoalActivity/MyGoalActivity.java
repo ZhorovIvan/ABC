@@ -30,6 +30,8 @@ public class MyGoalActivity extends AppCompatActivity {
     private TextView goal1, goal2, goal3, goal4, goal5;
     private EditText userInput;
     private List<GoalRow> goalRows;
+    public static final int VISIBLE = 0x00000000;
+    public static final int INVISIBLE = 0x00000004;
     private static final String USER_BOX_TITLE = "Dialog Box";
     private static final int MAX_SUM_GOAL_LETTERS = 32;
     private static final String FIELD_IS_EMPTY_MESSAGE = "Вы не написали цель";
@@ -47,6 +49,23 @@ public class MyGoalActivity extends AppCompatActivity {
         setButtonListener();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        SharedPreferences.Editor editPrefs = prefs.edit();
+//        editPrefs.putString("myProgress", "test");
+//        editPrefs.commit();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        SharedPreferences.Editor editPrefs = prefs.edit();
+//        editPrefs.putString("myProgress", "test");
+//        editPrefs.commit();
+        saveAllStates();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initAllEntities() {
@@ -70,11 +89,11 @@ public class MyGoalActivity extends AppCompatActivity {
 
         //If it necessary you can add new goal row
         goalRows = new ArrayList(){{
-            add(new GoalRow(goal1, switch1, "goal1", "switch1"));
-            add(new GoalRow(goal2, switch2, "goal2", "switch2"));
-            add(new GoalRow(goal3, switch3, "goal3", "switch3"));
-            add(new GoalRow(goal4, switch4, "goal4", "switch4"));
-            add(new GoalRow(goal5, switch5, "goal5", "switch5"));
+            add(new GoalRow(goal1, switch1, "1"));
+            add(new GoalRow(goal2, switch2, "2"));
+            add(new GoalRow(goal3, switch3, "3"));
+            add(new GoalRow(goal4, switch4, "4"));
+            add(new GoalRow(goal5, switch5, "5"));
         }};
     }
 
@@ -94,29 +113,26 @@ public class MyGoalActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
+    private void saveAllStates() {
+        SharedPreferences.Editor editPrefs = prefs.edit();
+        goalRows.forEach(goalRow -> {
+            editPrefs.putString(goalRow.getTextViewValueName(), goalRow.getGoalField().getText().toString());
+            editPrefs.putInt(goalRow.getTextViewVisibleStatusName(), goalRow.getGoalField().getVisibility());
+            editPrefs.putBoolean(goalRow.getSwitchValueName(), goalRow.getGoalSwitch().isChecked());
+            editPrefs.putInt(goalRow.getSwitchVisibleStatusName(), goalRow.getGoalSwitch().getVisibility());
+        });
+        editPrefs.commit();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void restoreAllStates() {
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         goalRows.forEach(goalRow -> {
-            //Think here
-            goalRow.getGoalField().setText(prefs.getString(goalRow.getTextViewName(), ""));
-            goalRow.getGoalSwitch().setChecked(prefs.getBoolean(goalRow.getSwitchName(), false));
+            goalRow.getGoalField().setText(prefs.getString(goalRow.getTextViewValueName(), ""));
+            goalRow.getGoalField().setVisibility(prefs.getInt(goalRow.getTextViewVisibleStatusName(), INVISIBLE));
+            goalRow.getGoalSwitch().setChecked(prefs.getBoolean(goalRow.getSwitchValueName(), false));
+            goalRow.getGoalSwitch().setVisibility(prefs.getInt(goalRow.getSwitchVisibleStatusName(), INVISIBLE));
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        SharedPreferences.Editor editPrefs = prefs.edit();
-//        editPrefs.putString("myProgress", "test");
-//        editPrefs.commit();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        SharedPreferences.Editor editPrefs = prefs.edit();
-//        editPrefs.putString("myProgress", "test");
-//        editPrefs.commit();
     }
 
     @Override
