@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.ivanzhorov.abcc.R;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,13 +28,13 @@ public class MyGoalActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
     private int currentApiVersion;
-    private Switch switch1, switch2, switch3, switch4, switch5;
-    private Button addButton, removeButtonButton;
+    private Button addButton;
     private TextView goal1, goal2, goal3, goal4, goal5;
     private EditText userInput;
     private List<GoalRow> goalRows;
-    public static final int VISIBLE = 0x00000000;
-    public static final int INVISIBLE = 0x00000004;
+    private static final int INVISIBLE = 0x00000004;
+    private static final String EDIT_GOAL_BUTTON = "Изменить цель";
+    private static final String DELETE_GOAL_BUTTON = "Выполнено";
     private static final String USER_BOX_TITLE = "Dialog Box";
     private static final int MAX_SUM_GOAL_LETTERS = 32;
     private static final String FIELD_IS_EMPTY_MESSAGE = "Вы не написали цель";
@@ -49,28 +52,31 @@ public class MyGoalActivity extends AppCompatActivity {
         setButtonListener();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        SharedPreferences.Editor editPrefs = prefs.edit();
-//        editPrefs.putString("myProgress", "test");
-//        editPrefs.commit();
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onPause() {
         super.onPause();
-//        SharedPreferences.Editor editPrefs = prefs.edit();
-//        editPrefs.putString("myProgress", "test");
-//        editPrefs.commit();
         saveAllStates();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveAllStates();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveAllStates();
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initAllEntities() {
         addButton = findViewById(R.id.add_new_goal);
-        removeButtonButton = findViewById(R.id.remove_button);
 
         goal1 = findViewById(R.id.goal1);
         goal2 = findViewById(R.id.goal2);
@@ -78,22 +84,16 @@ public class MyGoalActivity extends AppCompatActivity {
         goal4 = findViewById(R.id.goal4);
         goal5 = findViewById(R.id.goal5);
 
-        switch1 = findViewById(R.id.switch1);
-        switch2 = findViewById(R.id.switch2);
-        switch3 = findViewById(R.id.switch3);
-        switch4 = findViewById(R.id.switch4);
-        switch5 = findViewById(R.id.switch5);
-
         userInput = findViewById(R.id.input_goal);
         userInput.setVisibility(View.INVISIBLE);
 
         //If it necessary you can add new goal row
         goalRows = new ArrayList(){{
-            add(new GoalRow(goal1, switch1, "1"));
-            add(new GoalRow(goal2, switch2, "2"));
-            add(new GoalRow(goal3, switch3, "3"));
-            add(new GoalRow(goal4, switch4, "4"));
-            add(new GoalRow(goal5, switch5, "5"));
+            add(new GoalRow(goal1, "1"));
+            add(new GoalRow(goal2, "2"));
+            add(new GoalRow(goal3, "3"));
+            add(new GoalRow(goal4, "4"));
+            add(new GoalRow(goal5, "5"));
         }};
     }
 
@@ -104,10 +104,20 @@ public class MyGoalActivity extends AppCompatActivity {
                 pushAddButton();
             }
         });
-        removeButtonButton.setOnClickListener(new View.OnClickListener() {
+
+        setGoalOnClickListener(goal1);
+        setGoalOnClickListener(goal2);
+        setGoalOnClickListener(goal3);
+        setGoalOnClickListener(goal4);
+        setGoalOnClickListener(goal5);
+
+    }
+
+    private void setGoalOnClickListener(TextView goal) {
+        goal.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                closeAllTurnOnSwitches();
+            public void onClick(View v) {
+                alertDialogEditGoalRow();
             }
         });
     }
@@ -118,8 +128,6 @@ public class MyGoalActivity extends AppCompatActivity {
         goalRows.forEach(goalRow -> {
             editPrefs.putString(goalRow.getTextViewValueName(), goalRow.getGoalField().getText().toString());
             editPrefs.putInt(goalRow.getTextViewVisibleStatusName(), goalRow.getGoalField().getVisibility());
-            editPrefs.putBoolean(goalRow.getSwitchValueName(), goalRow.getGoalSwitch().isChecked());
-            editPrefs.putInt(goalRow.getSwitchVisibleStatusName(), goalRow.getGoalSwitch().getVisibility());
         });
         editPrefs.commit();
     }
@@ -130,32 +138,18 @@ public class MyGoalActivity extends AppCompatActivity {
         goalRows.forEach(goalRow -> {
             goalRow.getGoalField().setText(prefs.getString(goalRow.getTextViewValueName(), ""));
             goalRow.getGoalField().setVisibility(prefs.getInt(goalRow.getTextViewVisibleStatusName(), INVISIBLE));
-            goalRow.getGoalSwitch().setChecked(prefs.getBoolean(goalRow.getSwitchValueName(), false));
-            goalRow.getGoalSwitch().setVisibility(prefs.getInt(goalRow.getSwitchVisibleStatusName(), INVISIBLE));
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //Some code
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //Some code
-    }
-
-    private void closeAllTurnOnSwitches() {
-        for (GoalRow goalRow : goalRows) {
-            boolean isSwitchTurnOn = goalRow.getGoalSwitch().isChecked();
-            if (isSwitchTurnOn) {
-                hideUnusualRow(goalRow.getGoalField(), goalRow.getGoalSwitch());
-            }
-        }
-        sortGoalRows();
-    }
+//    private void closeAllTurnOnSwitches() {
+//        for (GoalRow goalRow : goalRows) {
+//            boolean isSwitchTurnOn = goalRow.getGoalSwitch().isChecked();
+//            if (isSwitchTurnOn) {
+//                hideUnusualRow(goalRow.getGoalField(), goalRow.getGoalSwitch());
+//            }
+//        }
+//        sortGoalRows();
+//    }
 
     private void sortGoalRows() {
         //Sort rows by empty field
@@ -173,17 +167,15 @@ public class MyGoalActivity extends AppCompatActivity {
             //
         } else {
             String text = filledRow.getGoalField().getText().toString();
-            hideUnusualRow(filledRow.getGoalField(), filledRow.getGoalSwitch());
+            hideUnusualRow(filledRow.getGoalField());
             //Write from filled row to empty
-            showRow(emptyRow.getGoalField(), emptyRow.getGoalSwitch(), text);
+            showRow(emptyRow.getGoalField(), text);
         }
     }
 
-    private void showRow(TextView textView, Switch goalSwitch, String text) {
+    private void showRow(TextView textView, String text) {
         textView.setText(text);
-        goalSwitch.setChecked(false);
         textView.setVisibility(View.VISIBLE);
-        goalSwitch.setVisibility(View.VISIBLE);
     }
 
     private ArrayList<GoalRow> getSubList(GoalRow goalRow) {
@@ -203,11 +195,9 @@ public class MyGoalActivity extends AppCompatActivity {
         return null;
     }
 
-    private void hideUnusualRow(TextView userGoal, Switch userSwitch) {
+    private void hideUnusualRow(TextView userGoal) {
         userGoal.setText("");
-        userSwitch.setChecked(false);
         userGoal.setVisibility(View.INVISIBLE);
-        userSwitch.setVisibility(View.INVISIBLE);
     }
 
     private void pushAddButton() {
@@ -240,6 +230,26 @@ public class MyGoalActivity extends AppCompatActivity {
         }
     }
 
+    private void alertDialogEditGoalRow() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setMessage("Выберете действия");
+        dialog.setTitle(USER_BOX_TITLE);
+        dialog.setPositiveButton(EDIT_GOAL_BUTTON, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        dialog.setNegativeButton(DELETE_GOAL_BUTTON, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+        dialog.setCancelable(true);
+        AlertDialog alertDialog = dialog.create();
+        alertDialog.show();
+    }
+
     private void alertDialog(String message) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage(message);
@@ -264,16 +274,15 @@ public class MyGoalActivity extends AppCompatActivity {
         for (GoalRow goalRow : goalRows) {
             String textGoal = goalRow.getGoalField().getText().toString();
             if (textGoal.equals("")) {
-                setNewRow(userInputGoal, goalRow.getGoalField(), goalRow.getGoalSwitch());
+                setNewRow(userInputGoal, goalRow.getGoalField());
                 return true;
             }
         }
         return null;
     }
 
-    private void setNewRow(String userInputGoal, TextView userGoal, Switch userSwitch) {
+    private void setNewRow(String userInputGoal, TextView userGoal) {
         userGoal.setText(userInputGoal);
-        userSwitch.setVisibility(View.VISIBLE);
         userGoal.setVisibility(View.VISIBLE);
         userInput.setText("");
     }

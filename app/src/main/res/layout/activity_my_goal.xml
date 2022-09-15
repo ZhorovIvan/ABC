@@ -10,147 +10,89 @@
 
     <TextView
         android:id="@+id/goal1"
-        android:layout_width="257dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="50dp"
-        android:text=""
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="48dp"
         android:paddingTop="15dp"
+        android:text=""
         android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/goal5"
-        android:layout_width="257dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="36dp"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
         android:layout_marginTop="30dp"
         android:paddingTop="15dp"
         android:text=""
         android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:typeface="normal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goal4" />
 
     <TextView
         android:id="@+id/goal4"
-        android:layout_width="257dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="36dp"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
         android:layout_marginTop="30dp"
+        android:paddingTop="15dp"
         android:text=""
         android:textAlignment="center"
-        android:paddingTop="15dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goal3" />
 
     <TextView
         android:id="@+id/goal2"
-        android:layout_width="257dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="36dp"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:text=""
         android:paddingTop="15dp"
+        android:text=""
         android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goal1" />
 
     <TextView
         android:id="@+id/goal3"
-        android:layout_width="257dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="36dp"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:text=""
         android:paddingTop="15dp"
+        android:text=""
         android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goal2" />
-
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="52dp"
-        android:minHeight="48dp"
-        android:text="@string/ready_button"
-        app:layout_constraintStart_toEndOf="@+id/goal1"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Switch
-        android:id="@+id/switch2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="32dp"
-        android:minHeight="48dp"
-        android:text="@string/ready_button"
-        app:layout_constraintStart_toEndOf="@+id/goal2"
-        app:layout_constraintTop_toBottomOf="@+id/switch1" />
-
-    <Switch
-        android:id="@+id/switch3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="32dp"
-        android:minHeight="48dp"
-        android:text="@string/ready_button"
-        app:layout_constraintStart_toEndOf="@+id/goal3"
-        app:layout_constraintTop_toBottomOf="@+id/switch2" />
-
-    <Switch
-        android:id="@+id/switch4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="36dp"
-        android:minHeight="48dp"
-        android:text="@string/ready_button"
-        app:layout_constraintStart_toEndOf="@+id/goal4"
-        app:layout_constraintTop_toBottomOf="@+id/switch3" />
-
-    <Switch
-        android:id="@+id/switch5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="32dp"
-        android:minHeight="48dp"
-        android:text="@string/ready_button"
-        app:layout_constraintStart_toEndOf="@+id/goal5"
-        app:layout_constraintTop_toBottomOf="@+id/switch4" />
 
     <Button
         android:id="@+id/add_new_goal"
         android:layout_width="390dp"
         android:layout_height="64dp"
-        android:layout_marginBottom="8dp"
         android:backgroundTint="#333"
         android:text="@string/create_new_goal_button"
         android:textSize="15sp"
         app:cornerRadius="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/remove_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.523"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/remove_button"
-        android:layout_width="390dp"
-        android:layout_height="64dp"
-        android:layout_marginBottom="44dp"
-        android:backgroundTint="#333"
-        android:text="@string/remote_done_goals"
-        android:textSize="15sp"
-        app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.538"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.961" />
 
     <EditText
         android:id="@+id/input_goal"
