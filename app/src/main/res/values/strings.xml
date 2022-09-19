@@ -12,6 +12,10 @@
     <string name="remote_done_goals">Удалить завершенные цели</string>
     <string name="ready_button">Done!</string>
 
+    <!-- Choose option layout -->
+    <string name="delete_text">Выполнено</string>
+    <string name="change_text">Изменить</string>
+
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>

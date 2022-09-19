@@ -4,9 +4,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -14,13 +16,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ivanzhorov.abcc.R;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -32,13 +31,14 @@ public class MyGoalActivity extends AppCompatActivity {
     private TextView goal1, goal2, goal3, goal4, goal5;
     private EditText userInput;
     private List<GoalRow> goalRows;
+    private Dialog optionLayoutDialog;
+    private Button optionLayoutDoneBtn, optionLayoutChangeBtn;
     private static final int INVISIBLE = 0x00000004;
-    private static final String EDIT_GOAL_BUTTON = "Изменить цель";
-    private static final String DELETE_GOAL_BUTTON = "Выполнено";
-    private static final String USER_BOX_TITLE = "Dialog Box";
+    private static final String USER_BOX_TITLE = "Информационное сообщение";
     private static final int MAX_SUM_GOAL_LETTERS = 32;
     private static final String FIELD_IS_EMPTY_MESSAGE = "Вы не написали цель";
     private static final String TOO_MANY_LETTERS_MESSAGE = "Ваша цель слишком длинная. Попробуйте сократить";
+    private static final String TOO_MANY_ROWS_MESSAGE = "Вы пытаетесь добавить 6 цель. Выполните предыдущие!";
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -73,7 +73,6 @@ public class MyGoalActivity extends AppCompatActivity {
         saveAllStates();
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initAllEntities() {
         addButton = findViewById(R.id.add_new_goal);
@@ -95,6 +94,8 @@ public class MyGoalActivity extends AppCompatActivity {
             add(new GoalRow(goal4, "4"));
             add(new GoalRow(goal5, "5"));
         }};
+
+        optionLayoutDialog = new Dialog(this);
     }
 
     private void setButtonListener() {
@@ -110,14 +111,13 @@ public class MyGoalActivity extends AppCompatActivity {
         setGoalOnClickListener(goal3);
         setGoalOnClickListener(goal4);
         setGoalOnClickListener(goal5);
-
     }
 
     private void setGoalOnClickListener(TextView goal) {
         goal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialogEditGoalRow();
+                alertDialogEditGoalRow(goal);
             }
         });
     }
@@ -141,16 +141,6 @@ public class MyGoalActivity extends AppCompatActivity {
         });
     }
 
-//    private void closeAllTurnOnSwitches() {
-//        for (GoalRow goalRow : goalRows) {
-//            boolean isSwitchTurnOn = goalRow.getGoalSwitch().isChecked();
-//            if (isSwitchTurnOn) {
-//                hideUnusualRow(goalRow.getGoalField(), goalRow.getGoalSwitch());
-//            }
-//        }
-//        sortGoalRows();
-//    }
-
     private void sortGoalRows() {
         //Sort rows by empty field
         for (GoalRow goalRow : goalRows) {
@@ -163,9 +153,7 @@ public class MyGoalActivity extends AppCompatActivity {
 
     private void changeRowPosition(GoalRow emptyRow) {
         GoalRow filledRow = gewFilledRow(getSubList(emptyRow));
-        if (filledRow == null) {
-            //
-        } else {
+        if (filledRow != null) {
             String text = filledRow.getGoalField().getText().toString();
             hideUnusualRow(filledRow.getGoalField());
             //Write from filled row to empty
@@ -201,11 +189,11 @@ public class MyGoalActivity extends AppCompatActivity {
     }
 
     private void pushAddButton() {
+        userInput.setText("");
         userInput.setVisibility(View.VISIBLE);
         userInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                //If the keyevent is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN)
                         && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     enterPushed();
@@ -216,61 +204,90 @@ public class MyGoalActivity extends AppCompatActivity {
         });
     }
 
-    private void enterPushed() {
-        userInput.setVisibility(View.INVISIBLE);
-        String userGoal = String.valueOf(userInput.getText());
+    private boolean isValidateUserInput(String userGoal) {
         if (userGoal.equals("")) {
-            alertDialog(FIELD_IS_EMPTY_MESSAGE);
+            alertDialogMessageError(FIELD_IS_EMPTY_MESSAGE);
+            return false;
         }
         else if (userGoal.length() > MAX_SUM_GOAL_LETTERS) {
-            alertDialog(TOO_MANY_LETTERS_MESSAGE);
+            alertDialogMessageError(TOO_MANY_LETTERS_MESSAGE);
+            return false;
         }
-        else {
-            chooseWriteRowForFilling(userGoal);
-        }
+        return true;
     }
 
-    private void alertDialogEditGoalRow() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setMessage("Выберете действия");
-        dialog.setTitle(USER_BOX_TITLE);
-        dialog.setPositiveButton(EDIT_GOAL_BUTTON, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-
-            }
-        });
-
-        dialog.setNegativeButton(DELETE_GOAL_BUTTON, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-
-            }
-        });
-        dialog.setCancelable(true);
-        AlertDialog alertDialog = dialog.create();
-        alertDialog.show();
-    }
-
-    private void alertDialog(String message) {
+    private void alertDialogMessageError(String message) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage(message);
         dialog.setTitle(USER_BOX_TITLE);
         AlertDialog alertDialog = dialog.create();
         alertDialog.show();
-        closeKeyboard();
     }
 
-    private void chooseWriteRowForFilling(String userInputGoal) {
-        Boolean result = hasRowForFilling(userInputGoal);
-        if (result == null) {
-            //Some code
+    private void enterPushed() {
+        String userGoal = String.valueOf(userInput.getText());
+        if (isValidateUserInput(userGoal)) {
+            userInput.setVisibility(View.INVISIBLE);
+            closeKeyboard();
+            if (!hasEmptyRowForFilling(userGoal)) {
+                alertDialogMessageError(TOO_MANY_ROWS_MESSAGE);
+            }
         }
-        else {
-            //Some code
-        }
-        closeKeyboard();
     }
 
-    private Boolean hasRowForFilling(String userInputGoal) {
+    private void alertDialogEditGoalRow(TextView goal) {
+        optionLayoutDialog.setContentView(R.layout.choose_option_layout);
+        optionLayoutDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        optionLayoutDoneBtn = optionLayoutDialog.findViewById(R.id.delete_btn);
+        optionLayoutChangeBtn = optionLayoutDialog.findViewById(R.id.change_btn);
+        optionLayoutDoneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                optionLayoutDialog.dismiss();
+                pushOptionLayoutDeleteBtn(goal);
+            }
+        });
+        optionLayoutChangeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                optionLayoutDialog.dismiss();
+                pushOptionLayoutChangeBtn(goal);
+            }
+        });
+        optionLayoutDialog.show();
+    }
+
+    private void pushOptionLayoutDeleteBtn(TextView goal) {
+        hideUnusualRow(goal);
+        sortGoalRows();
+    }
+
+    private void pushOptionLayoutChangeBtn(TextView goal) {
+        userInput.setVisibility(View.VISIBLE);
+        userInput.setText(goal.getText());
+        userInput.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN)
+                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    enterPushedForOptionLayout(goal);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void enterPushedForOptionLayout(TextView goal) {
+        String userGoal = String.valueOf(userInput.getText());
+        if (isValidateUserInput(userGoal)) {
+            userInput.setVisibility(View.INVISIBLE);
+            goal.setText(userGoal);
+            closeKeyboard();
+        }
+    }
+
+    private boolean hasEmptyRowForFilling(String userInputGoal) {
         for (GoalRow goalRow : goalRows) {
             String textGoal = goalRow.getGoalField().getText().toString();
             if (textGoal.equals("")) {
@@ -278,7 +295,7 @@ public class MyGoalActivity extends AppCompatActivity {
                 return true;
             }
         }
-        return null;
+        return false;
     }
 
     private void setNewRow(String userInputGoal, TextView userGoal) {
@@ -286,11 +303,6 @@ public class MyGoalActivity extends AppCompatActivity {
         userGoal.setVisibility(View.VISIBLE);
         userInput.setText("");
     }
-
-//    @RequiresApi(api = Build.VERSION_CODES.N)
-//    private void hideUnusedEntities(ArrayList<View> entities) {
-//        entities.forEach(entity -> entity.setVisibility(View.INVISIBLE));
-//    }
 
     private void hideSystemButtons() {
         currentApiVersion = android.os.Build.VERSION.SDK_INT;

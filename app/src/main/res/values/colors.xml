@@ -14,5 +14,7 @@
     <color name="round_gradient_button_start_color">#DC2424</color>
     <color name="round_gradient_button_end_color">#4A569D</color>
     <color name="calm_color">#A3F1F0</color>
+    <color name="ol_done_btn">#4CAF50</color>
+    <color name="ol_change_btn">#F44336</color>
 
 </resources>
