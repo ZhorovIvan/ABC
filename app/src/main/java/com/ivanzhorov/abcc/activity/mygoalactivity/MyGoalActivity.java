@@ -1,4 +1,4 @@
-package com.ivanzhorov.abcc.activity.MyGoalActivity;
+package com.ivanzhorov.abcc.activity.mygoalactivity;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.ivanzhorov.abcc.R;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class MyGoalActivity extends AppCompatActivity {
 

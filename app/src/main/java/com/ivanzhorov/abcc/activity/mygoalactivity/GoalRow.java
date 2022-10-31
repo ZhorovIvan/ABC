@@ -1,6 +1,5 @@
-package com.ivanzhorov.abcc.activity.MyGoalActivity;
+package com.ivanzhorov.abcc.activity.mygoalactivity;
 
-import android.widget.Switch;
 import android.widget.TextView;
 
 public class GoalRow {

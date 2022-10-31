@@ -12,6 +12,13 @@
     <string name="remote_done_goals">Удалить завершенные цели</string>
     <string name="ready_button">Done!</string>
 
+    <!-- Choose dataset from user -->
+    <string name="choose_time_button">Выбрать время</string>
+    <string name="choose_time_text">Выберете время, когда произошла ситуация</string>
+    <string name="choose_date_button">Выбрать дату</string>
+    <string name="choose_date_text">Выберете дату, когда произошла ситуация</string>
+
+
     <!-- Choose option layout -->
     <string name="delete_text">Выполнено</string>
     <string name="change_text">Изменить</string>

@@ -17,14 +17,14 @@
             android:name=".activity.HelpActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.MyGoalActivity.MyGoalActivity"
+            android:name=".activity.mygoalactivity.MyGoalActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MyAnalysisActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.CreateNodeActivity"
+            android:name=".activity.createnode.CreateNodeActivity"
             android:exported="false" />
         <activity
             android:name=".activity.GeneralActivity"
